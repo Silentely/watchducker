@@ -116,11 +116,6 @@ func loadConfig() (*Config, error) {
 
 // Validate 验证配置的有效性
 func (c *Config) validate() error {
-	// 验证容器名称和标签模式不能同时使用
-	if len(c.containerNames) > 0 && c.useLabel {
-		return fmt.Errorf("不能同时指定容器名称和使用 --label 选项")
-	}
-
 	// 验证至少需要一种检查方式
 	if len(c.containerNames) == 0 && !c.useLabel {
 		return fmt.Errorf("必须指定容器名称或使用 --label 选项")
