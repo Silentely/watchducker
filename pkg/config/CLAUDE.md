@@ -40,6 +40,7 @@ if cfg.CheckLabel() {
 
 ### Config 结构体的 getter 方法
 - `CheckLabel() bool` - 是否使用标签模式
+- `CheckAll() bool` - 是否检查所有容器
 - `NoRestart() bool` - 是否只检查不重启
 - `RunOnce() bool` - 是否单次执行模式
 - `CronExpression() string` - 获取 cron 表达式
@@ -58,7 +59,8 @@ if cfg.CheckLabel() {
 4. 默认值
 
 ### 支持的环境变量
-- `WATCHDUCKER_USE_LABEL` - 等同于 `--label`
+- `WATCHDUCKER_LABEL` - 等同于 `--label`
+- `WATCHDUCKER_ALL` - 等同于 `--all`
 - `WATCHDUCKER_NO_RESTART` - 等同于 `--no-restart`
 - `WATCHDUCKER_CRON` - 等同于 `--cron`
 - `WATCHDUCKER_LOG_LEVEL` - 设置日志级别
@@ -69,6 +71,7 @@ if cfg.CheckLabel() {
 ```go
 type Config struct {
     checkLabel     bool     // 标签模式标识
+    checkAll       bool     // 检查所有容器标识
     noRestart      bool     // 不重启标识
     runOnce        bool     // 单次执行模式
     cronExpression string   // cron 表达式

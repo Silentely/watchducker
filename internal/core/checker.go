@@ -64,6 +64,20 @@ func (c *Checker) CheckByLabel(ctx context.Context, labelKey, labelValue string)
 	return c.checkImages(ctx, containers, utils.CreateCheckCallback())
 }
 
+// CheckAll 检查所有容器的镜像更新
+func (c *Checker) CheckAll(ctx context.Context) (*types.BatchCheckResult, error) {
+	logger.Info("开始检查所有容器的镜像更新")
+
+	// 获取所有容器
+	containers, err := c.containerSvc.GetAll(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("获取所有容器失败: %w", err)
+	}
+
+	// 使用通用检查逻辑
+	return c.checkImages(ctx, containers, utils.CreateCheckCallback())
+}
+
 // checkImages 通用的镜像检查逻辑
 func (c *Checker) checkImages(ctx context.Context, containers []types.ContainerInfo, callback types.CheckCallback) (*types.BatchCheckResult, error) {
 	startTime := time.Now()

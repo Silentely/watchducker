@@ -29,6 +29,13 @@ func checkContainersByLabel(ctx context.Context) {
 	})
 }
 
+// checkAllContainers 检查所有容器的镜像更新
+func checkAllContainers(ctx context.Context) {
+	RunChecker(ctx, func(checker *core.Checker) (*types.BatchCheckResult, error) {
+		return checker.CheckAll(ctx)
+	})
+}
+
 // RunOnce 单次执行模式
 func RunOnce(ctx context.Context) {
 	cfg := config.Get()
@@ -37,6 +44,8 @@ func RunOnce(ctx context.Context) {
 		checkContainersByName(ctx)
 	} else if cfg.CheckLabel() {
 		checkContainersByLabel(ctx)
+	} else if cfg.CheckAll() {
+		checkAllContainers(ctx)
 	} else {
 		config.PrintUsage()
 	}

@@ -194,6 +194,33 @@ func (cos *ContainerService) CreateContainer(ctx context.Context, config *contai
 	return resp.ID, nil
 }
 
+// GetAll 获取所有容器信息
+func (cs *ContainerService) GetAll(ctx context.Context) ([]types.ContainerInfo, error) {
+	cli := cs.clientManager.GetClient()
+
+	// 获取所有容器列表
+	containers, err := cli.ContainerList(ctx, container.ListOptions{
+		All: true, // 包括停止的容器
+	})
+	if err != nil {
+		return nil, fmt.Errorf("获取容器列表失败: %w", err)
+	}
+
+	var result []types.ContainerInfo
+	for _, container := range containers {
+		// 使用第一个名称作为容器名称
+		normalizedName := container.Names[0]
+		if len(normalizedName) > 0 && normalizedName[0] == '/' {
+			normalizedName = normalizedName[1:]
+		}
+
+		containerInfo := cs.createContainerInfo(container, normalizedName)
+		result = append(result, containerInfo)
+	}
+
+	return result, nil
+}
+
 // GetContainerConfig 获取容器配置
 func (cos *ContainerService) GetContainerConfig(ctx context.Context, containerID string) (*dockerTypes.ContainerJSON, error) {
 	cli := cos.clientManager.GetClient()

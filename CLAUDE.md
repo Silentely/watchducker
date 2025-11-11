@@ -63,6 +63,7 @@ goreleaser build --snapshot
 ### 运行模式
 - **单次模式**: `watchducker --once nginx redis`
 - **定时模式**: `watchducker --cron "0 2 * * *" --label`
+- **全部容器**: `watchducker --all --once`
 - **标签驱动**: 通过 `watchducker.update=true` 标签管理容器
 
 ## 测试策略

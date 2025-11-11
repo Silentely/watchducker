@@ -37,6 +37,7 @@ imageSvc := docker.NewImageService(clientManager)
 ### ContainerService 主要方法
 - `ListContainersByLabel(labelKey, labelValue)` - 按标签查询容器
 - `ListContainersByName(names)` - 按名称查询容器
+- `GetAll()` - 获取所有容器信息
 - `GetContainerInfo(containerID)` - 获取容器详细信息
 - `StartContainer(containerID)` - 启动容器
 - `StopContainer(containerID)` - 停止容器

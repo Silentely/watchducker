@@ -32,6 +32,7 @@ main.go → config.Load() → cmd.RunOnce() / cmd.RunCronScheduler()
 
 ### 配置参数
 - `--label`: 检查带有 `watchducker.update=true` 标签的容器
+- `--all`: 检查所有容器，无论是否带有标签
 - `--no-restart`: 只检查不重启容器
 - `--cron`: 定时任务表达式
 - `--once`: 单次执行模式

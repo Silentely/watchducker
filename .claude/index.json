@@ -1,0 +1,96 @@
+{
+  "timestamp": "2025-11-11T14:11:43Z",
+  "project_name": "WatchDucker",
+  "project_type": "Go Docker Utility",
+  "root_has_claude_md": true,
+  "modules": {
+    "cmd": {
+      "path": "cmd",
+      "has_claude_md": true,
+      "entry_files": ["cmd.go"],
+      "external_interfaces": ["RunOnce", "RunCronScheduler", "RunChecker"],
+      "dependencies": ["pkg/config", "pkg/logger", "pkg/utils", "internal/core", "internal/types"],
+      "tests_exist": false,
+      "coverage": 100,
+      "truncated": false
+    },
+    "internal/core": {
+      "path": "internal/core",
+      "has_claude_md": true,
+      "entry_files": ["checker.go", "operator.go"],
+      "external_interfaces": ["NewChecker", "NewOperator"],
+      "dependencies": ["internal/docker", "internal/types", "pkg/logger", "pkg/utils"],
+      "tests_exist": false,
+      "coverage": 100,
+      "truncated": false
+    },
+    "internal/docker": {
+      "path": "internal/docker",
+      "has_claude_md": true,
+      "entry_files": ["client.go", "container.go", "image.go"],
+      "external_interfaces": ["NewClientManager", "NewContainerService", "NewImageService"],
+      "dependencies": ["github.com/docker/docker/client"],
+      "tests_exist": false,
+      "coverage": 100,
+      "truncated": false
+    },
+    "internal/types": {
+      "path": "internal/types",
+      "has_claude_md": true,
+      "entry_files": ["types.go"],
+      "external_interfaces": ["ContainerInfo", "ImageCheckResult", "BatchCheckResult", "CheckMode"],
+      "dependencies": [],
+      "tests_exist": false,
+      "coverage": 100,
+      "truncated": false
+    },
+    "pkg/config": {
+      "path": "pkg/config",
+      "has_claude_md": true,
+      "entry_files": ["config.go"],
+      "external_interfaces": ["Load", "Get", "PrintUsage"],
+      "dependencies": ["github.com/spf13/pflag", "github.com/spf13/viper"],
+      "tests_exist": false,
+      "coverage": 100,
+      "truncated": false
+    },
+    "pkg/logger": {
+      "path": "pkg/logger",
+      "has_claude_md": true,
+      "entry_files": ["logger.go"],
+      "external_interfaces": ["Debug", "Info", "Warn", "Error", "Fatal"],
+      "dependencies": [],
+      "tests_exist": false,
+      "coverage": 100,
+      "truncated": false
+    },
+    "pkg/utils": {
+      "path": "pkg/utils",
+      "has_claude_md": true,
+      "entry_files": ["display.go"],
+      "external_interfaces": ["PrintWelcome", "PrintContainerList", "PrintBatchSummary"],
+      "dependencies": ["internal/types", "fmt"],
+      "tests_exist": false,
+      "coverage": 100,
+      "truncated": false
+    }
+  },
+  "file_statistics": {
+    "total_files": 14,
+    "scanned_files": 14,
+    "coverage_percentage": 100,
+    "ignore_summary": {
+      "patterns": [".DS_Store", "**/.DS_Store", ".idea/", ".vscode/", "vendor/", "*.log", ".env*", "tmp/", "temp/", "logs/", "watchducker", "watchducker.exe"],
+      "files_matched": 1
+    }
+  },
+  "scan_coverage": {
+    "modules_complete": 7,
+    "modules_incomplete": 0,
+    "test_coverage_gap": true,
+    "next_scan_recommendations": [
+      "检查是否缺少第三方配置（如.dockerignore、.goreleaser.yml等）",
+      "建议为所有模块添加单元测试"
+    ]
+  }
+}
