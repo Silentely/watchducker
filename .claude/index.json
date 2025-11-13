@@ -1,15 +1,25 @@
 {
-  "timestamp": "2025-11-11T14:11:43Z",
+  "timestamp": "2025-11-13T16:30:00Z",
   "project_name": "WatchDucker",
   "project_type": "Go Docker Utility",
   "root_has_claude_md": true,
   "modules": {
+    "pkg/notify": {
+      "path": "pkg/notify",
+      "has_claude_md": true,
+      "entry_files": ["notify.go"],
+      "external_interfaces": ["NewNotifier", "SendNotification"],
+      "dependencies": ["github.com/pkg/errors", "gopkg.in/yaml.v2"],
+      "tests_exist": false,
+      "coverage": 100,
+      "truncated": false
+    },
     "cmd": {
       "path": "cmd",
       "has_claude_md": true,
       "entry_files": ["cmd.go"],
       "external_interfaces": ["RunOnce", "RunCronScheduler", "RunChecker"],
-      "dependencies": ["pkg/config", "pkg/logger", "pkg/utils", "internal/core", "internal/types"],
+      "dependencies": ["pkg/config", "pkg/logger", "pkg/utils", "pkg/notify", "internal/core", "internal/types"],
       "tests_exist": false,
       "coverage": 100,
       "truncated": false
@@ -19,7 +29,7 @@
       "has_claude_md": true,
       "entry_files": ["checker.go", "operator.go"],
       "external_interfaces": ["NewChecker", "NewOperator"],
-      "dependencies": ["internal/docker", "internal/types", "pkg/logger", "pkg/utils"],
+      "dependencies": ["internal/docker", "internal/types", "pkg/logger", "pkg/utils", "pkg/notify"],
       "tests_exist": false,
       "coverage": 100,
       "truncated": false
@@ -76,8 +86,8 @@
     }
   },
   "file_statistics": {
-    "total_files": 14,
-    "scanned_files": 14,
+    "total_files": 15,
+    "scanned_files": 15,
     "coverage_percentage": 100,
     "ignore_summary": {
       "patterns": [".DS_Store", "**/.DS_Store", ".idea/", ".vscode/", "vendor/", "*.log", ".env*", "tmp/", "temp/", "logs/", "watchducker", "watchducker.exe"],
@@ -85,12 +95,9 @@
     }
   },
   "scan_coverage": {
-    "modules_complete": 7,
+    "modules_complete": 8,
     "modules_incomplete": 0,
     "test_coverage_gap": true,
-    "next_scan_recommendations": [
-      "检查是否缺少第三方配置（如.dockerignore、.goreleaser.yml等）",
-      "建议为所有模块添加单元测试"
-    ]
+    "next_scan_recommendations": []
   }
 }
