@@ -5,6 +5,7 @@
 .vscode/
 .claude/
 !.claude/index.json
+.serena
 
 vendor/
 

@@ -117,6 +117,11 @@ func loadConfig(configPath string) error {
 	v.SetConfigFile(configPath)
 	v.SetConfigType("yaml")
 
+	// 支持环境变量，前缀为 WATCHDUCKER_
+	v.SetEnvPrefix("WATCHDUCKER")
+	v.AutomaticEnv()
+	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
 	if err := v.ReadInConfig(); err != nil {
 		logger.Error("配置文件读取失败: %v", err)
 	}

@@ -58,8 +58,16 @@ docker run --name watchducker -v /var/run/docker.sock:/var/run/docker.sock naomi
 # 每天执行，只检查不重启
 docker run --name watchducker -v /var/run/docker.sock:/var/run/docker.sock naomi233/watchducker:latest watchducker --cron "@daily" --no-restart nginx
 
-# 使用通知功能（需要配置 push.yaml）
+# 使用通知功能（方式一：挂载配置文件）
 docker run --name watchducker -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/push.yaml:/app/push.yaml naomi233/watchducker:latest watchducker --cron "0 2 * * *" --label
+
+# 使用通知功能（方式二：环境变量，无需挂载配置文件）
+docker run --name watchducker \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -e WATCHDUCKER_SETTING_PUSH_SERVER=telegram \
+  -e WATCHDUCKER_TELEGRAM_BOT_TOKEN=YOUR_BOT_TOKEN \
+  -e WATCHDUCKER_TELEGRAM_CHAT_ID=YOUR_CHAT_ID \
+  naomi233/watchducker:latest watchducker --cron "0 2 * * *" --label
 ```
 
 ### 可执行文件
@@ -118,7 +126,9 @@ services:
 
 ### 通知功能配置
 
-WatchDucker 支持同时使用多种通知渠道，通过 `push.yaml` 配置文件进行配置：
+WatchDucker 支持同时使用多种通知渠道，可通过 `push.yaml` 配置文件或环境变量进行配置。
+
+#### 方式一：配置文件（推荐）
 
 ```yaml
 setting:
@@ -131,6 +141,44 @@ telegram:
   chat_id: "YOUR_CHAT_ID"  # 聊天ID
 
 # 其他通知方式配置...
+```
+
+#### 方式二：环境变量（无需挂载配置文件）
+
+环境变量会覆盖配置文件中的对应值，格式为 `WATCHDUCKER_` + 配置路径（用下划线连接）：
+
+```bash
+# 基础配置
+export WATCHDUCKER_SETTING_PUSH_SERVER="telegram"
+export WATCHDUCKER_SETTING_LOG_LEVEL="INFO"
+
+# Telegram 配置
+export WATCHDUCKER_TELEGRAM_API_URL="api.telegram.org"
+export WATCHDUCKER_TELEGRAM_BOT_TOKEN="YOUR_BOT_TOKEN"
+export WATCHDUCKER_TELEGRAM_CHAT_ID="YOUR_CHAT_ID"
+
+# 钉钉配置
+export WATCHDUCKER_DINGROBOT_WEBHOOK="https://oapi.dingtalk.com/robot/send?access_token=xxx"
+export WATCHDUCKER_DINGROBOT_SECRET="SECxxx"
+```
+
+Docker Compose 环境变量示例：
+
+```yml
+services:
+  watchducker:
+    image: naomi233/watchducker
+    container_name: watchducker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=Asia/Shanghai
+      - WATCHDUCKER_CRON=0 2 * * *
+      - WATCHDUCKER_LABEL=true
+      # 通知配置（无需挂载 push.yaml）
+      - WATCHDUCKER_SETTING_PUSH_SERVER=telegram
+      - WATCHDUCKER_TELEGRAM_BOT_TOKEN=YOUR_BOT_TOKEN
+      - WATCHDUCKER_TELEGRAM_CHAT_ID=YOUR_CHAT_ID
 ```
 
 支持的通知服务：
