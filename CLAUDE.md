@@ -19,6 +19,7 @@ graph TD
     D --> H["config/"];
     D --> I["logger/"];
     D --> J["utils/"];
+    D --> K["notify/"];
 
     click B "./cmd/CLAUDE.md" "查看 cmd 模块文档"
     click E "./internal/core/CLAUDE.md" "查看 core 模块文档"
@@ -27,6 +28,7 @@ graph TD
     click H "./pkg/config/CLAUDE.md" "查看 config 模块文档"
     click I "./pkg/logger/CLAUDE.md" "查看 logger 模块文档"
     click J "./pkg/utils/CLAUDE.md" "查看 utils 模块文档"
+    click K "./pkg/notify/CLAUDE.md" "查看 notify 模块文档"
 ```
 
 ## 模块索引
@@ -39,6 +41,7 @@ graph TD
 | `internal/types/` | 类型定义与数据结构 | Go | `types.go` | 无测试 |
 | `pkg/config/` | 配置管理与命令行参数 | Go | `config.go` | 无测试 |
 | `pkg/logger/` | 日志系统封装 | Go | `logger.go` | 无测试 |
+| `pkg/notify/` | 多平台通知服务 | Go | `notify.go` | 无测试 |
 | `pkg/utils/` | 工具函数与显示输出 | Go | `display.go` | 无测试 |
 
 ## 运行与开发
@@ -66,6 +69,7 @@ goreleaser build --snapshot
 - **全部容器**: `watchducker --all --once`
 - **标签驱动**: 通过 `watchducker.update=true` 标签管理容器
 - **镜像清理**: `watchducker --clean --once nginx` (更新后清理悬空镜像)
+- **通知功能**: 配置 `push.yaml` 文件后自动推送更新结果到 15+ 种平台
 
 ## 测试策略
 
@@ -96,6 +100,12 @@ goreleaser build --snapshot
 
 ## 变更记录 (Changelog)
 
+### 2025-11-13 14:26:00
+- 添加通知功能模块 `pkg/notify/`，支持 15+ 种通知方式
+- 新增 `push.yaml.example` 配置文件示例
+- 集成通知服务到核心业务逻辑，自动推送更新结果
+- 支持多渠道同时推送，包括 Telegram、微信、钉钉、飞书、邮件等
+
 ### 2025-11-12 15:30:00
 - 添加 `--clean` 参数功能，支持在容器更新后自动清理悬空镜像
 - 更新配置模块支持新的命令行参数和环境变量
@@ -110,7 +120,7 @@ goreleaser build --snapshot
 
 ---
 
-**文件统计**: 14个源文件，100%覆盖主要模块
-**最新功能**: 支持 `--clean` 参数自动清理悬空镜像
+**文件统计**: 15个源文件，100%覆盖主要模块
+**最新功能**: 支持多平台通知推送（15+ 种方式）
 **下一步扫描建议**: 无（已完整扫描所有模块）
 **关键缺口**: 测试覆盖率缺失，建议添加单元测试和集成测试

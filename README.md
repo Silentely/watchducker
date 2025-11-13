@@ -14,6 +14,7 @@
 - ✨ **实时反馈**: 检查过程中提供实时进度和结果输出
 - 🐳 **Docker 原生**: 完全基于 Docker API，无需额外依赖
 - ⚙️ **无需代理**: 复用现有 Docker 配置，无需额外配置认证和代理、[加速镜像源](https://github.com/dongyubin/DockerHub)
+- 📢 **多平台通知**: 支持 Telegram、微信、钉钉、飞书、邮件等 15+ 种通知方式
 
 ## 🚀 快速开始
 
@@ -56,6 +57,9 @@ docker run --name watchducker -v /var/run/docker.sock:/var/run/docker.sock naomi
 docker run --name watchducker -v /var/run/docker.sock:/var/run/docker.sock naomi233/watchducker:latest watchducker --cron "*/30 * * * *" nginx redis
 # 每天执行，只检查不重启
 docker run --name watchducker -v /var/run/docker.sock:/var/run/docker.sock naomi233/watchducker:latest watchducker --cron "@daily" --no-restart nginx
+
+# 使用通知功能（需要配置 push.yaml）
+docker run --name watchducker -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/push.yaml:/app/push.yaml naomi233/watchducker:latest watchducker --cron "0 2 * * *" --label
 ```
 
 ### 可执行文件
@@ -77,6 +81,9 @@ watchducker --cron "0 2 * * *" --label
 watchducker --cron "*/30 * * * *" nginx redis
 # 每天执行，只检查不重启
 watchducker --cron "@daily" --no-restart nginx
+
+# 使用通知功能（需要配置 push.yaml）
+watchducker --cron "0 2 * * *" --label
 ```
 
 ### Docker Compose 配置示例
@@ -89,6 +96,7 @@ services:
     network_mode: bridge
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./push.yaml:/app/push.yaml  # 挂载通知配置文件
     environment:
       - TZ=Asia/Shanghai
       - WATCHDUCKER_LOG_LEVEL=DEBUG
@@ -107,6 +115,42 @@ services:
 - `--cron`: 定时执行，使用标准 [cron 表达式](https://crontab.guru) 格式，默认 "0 2 * * *"
 - `--once`: 只执行一次检查和更新，然后退出
 - 容器名称列表
+
+### 通知功能配置
+
+WatchDucker 支持同时使用多种通知渠道，通过 `push.yaml` 配置文件进行配置：
+
+```yaml
+setting:
+  push_server: "telegram"  # 推送服务列表（支持多渠道 用,分开）
+  log_level: "DEBUG"  # 日志级别：DEBUG/INFO/WARN/ERROR
+
+telegram:
+  api_url: "api.telegram.org"  # Telegram API地址（支持反代）
+  bot_token: "YOUR_BOT_TOKEN"  # 机器人Token
+  chat_id: "YOUR_CHAT_ID"  # 聊天ID
+
+# 其他通知方式配置...
+```
+
+支持的通知服务：
+- **Telegram**: 机器人推送
+- **Server酱 (FTQQ)**: 微信推送
+- **PushPlus**: 微信推送
+- **CQHTTP**: QQ 推送
+- **SMTP**: 邮件推送
+- **企业微信**: 应用消息和群机器人
+- **PushDeer**: 自建推送服务
+- **钉钉**: 群机器人
+- **飞书**: 群机器人
+- **Bark**: iOS 推送
+- **Gotify**: 自建推送服务
+- **IFTTT**: Webhook 触发
+- **Webhook**: 自定义 Webhook
+- **Qmsg**: QQ 消息推送
+- **Discord**: Webhook 推送
+
+详细配置示例请参考 [push.yaml.example](push.yaml.example) 文件。
 
 ### 环境变量
 
@@ -159,11 +203,14 @@ watchducker/
 ├── pkg/                      # 可复用的公共包
 │   ├── config/                # 配置管理
 │   │   └── config.go
-├── pkg/logger/               # 日志系统
+│   ├── logger/               # 日志系统
 │   │   └── logger.go
+│   ├── notify/               # 通知系统
+│   │   └── notify.go         # 多平台通知服务
 │   └── utils/                 # 工具函数
 │       └── display.go         # 显示输出
 ├── main.go                    # 程序入口
+├── push.yaml.example         # 通知配置示例文件
 ```
 
 ### 核心组件
@@ -172,6 +219,7 @@ watchducker/
 - **Operator**: 容器操作器，负责容器的重启和更新操作
 - **ContainerService**: 容器服务，封装 Docker 容器的操作
 - **ImageService**: 镜像服务，封装 Docker 镜像的检查逻辑
+- **NotifyService**: 通知服务，支持 15+ 种通知方式推送更新结果
 
 ## 🔧 开发
 

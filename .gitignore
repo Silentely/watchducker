@@ -19,5 +19,8 @@ logs/
 
 dist/
 
+push.yaml
+!push.yaml.example
+
 watchducker
 watchducker.exe

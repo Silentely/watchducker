@@ -20,5 +20,4 @@ func main() {
 	}
 
 	cmd.RunCronScheduler(ctx)
-
 }

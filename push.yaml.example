@@ -1,5 +1,5 @@
 setting:
-  push_server: "telegram"  # 推送服务列表（支持多渠道用,分开）
+  push_server: "telegram"  # 推送服务列表（支持多渠道 用,分开）
   log_level: "DEBUG"  # 日志级别：DEBUG/INFO/WARN/ERROR
 
 telegram:
