@@ -19,10 +19,14 @@ WORKDIR /app
 
 RUN apk add --no-cache tzdata ca-certificates
 
+ENV TZ=UTC
+
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY --from=builder /out/watchducker /app/watchducker
 COPY push.yaml.example /app
 
-RUN chmod +x /app/watchducker && \
+RUN chmod +x /app/watchducker /usr/local/bin/entrypoint.sh && \
     ln -s /app/watchducker /usr/local/bin/watchducker
 
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["watchducker"]

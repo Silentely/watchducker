@@ -224,7 +224,14 @@ export WATCHDUCKER_CRON="0 2 * * *"
 
 # 设置日志级别 (DEBUG/INFO/WARN/ERROR)
 export WATCHDUCKER_LOG_LEVEL=DEBUG
+
+# 设置容器时区（默认 UTC，可按需覆盖）
+export TZ=Asia/Shanghai
 ```
+
+### 时区配置
+
+容器镜像默认按照 UTC 运行。只需通过标准 `TZ` 环境变量（如 `-e TZ=Asia/Shanghai`，或在 Compose/环境配置中设置 `TZ`）即可让容器启动时自动切换到目标时区，无需额外挂载 `/etc/localtime`。
 
 ### 使用标签驱动更新
 
