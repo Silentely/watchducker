@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"net/smtp"
 	"net/url"
-	"os"
 	"strings"
 	"time"
 	"watchducker/pkg/logger"
