@@ -1,6 +1,6 @@
 # WatchDucker - Docker 容器自动更新工具
 
-> 更新时间：2025-11-12 15:30:00
+> 更新时间：2025-11-15 15:30:00
 
 ## 项目愿景
 
@@ -69,7 +69,8 @@ goreleaser build --snapshot
 - **全部容器**: `watchducker --all --once`
 - **标签驱动**: 通过 `watchducker.update=true` 标签管理容器
 - **镜像清理**: `watchducker --clean --once nginx` (更新后清理悬空镜像)
-- **通知功能**: 配置 `push.yaml` 文件后自动推送更新结果到 15+ 种平台
+- **容器排除**: `watchducker --disabled-containers "container1,container2" --once` (排除指定容器)
+- **通知功能**: 配置 `push.yaml` 文件或环境变量后自动推送更新结果到 15+ 种平台
 
 ## 测试策略
 
@@ -99,6 +100,11 @@ goreleaser build --snapshot
 - 忽略容器状态检查的安全性
 
 ## 变更记录 (Changelog)
+
+### 2025-11-15 15:30:00
+- 更新项目文档，同步最新功能变更
+- 完善模块索引和配置说明
+- 优化文档结构和导航链接
 
 ### 2025-11-13 14:26:00
 - 添加通知功能模块 `pkg/notify/`，支持 15+ 种通知方式
